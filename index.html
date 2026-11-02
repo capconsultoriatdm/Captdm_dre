@@ -13074,34 +13074,46 @@ const DRE_ESTRUTURA_PADRAO = [
   { nome:'Margem de Contribuição',              tipo:'subtotal', m:n => n.includes('margem') && n.includes('contribuic') },
   { nome:'Despesas Administrativas',            tipo:'saida',    classe:'fixo', m:n => n.includes('administrativ') },
   { nome:'Despesas Comerciais',                 tipo:'saida',    classe:'fixo', m:n => n.includes('comerci') },
-  { nome:'Ebitda/Resultado Operacional',        tipo:'subtotal', m:n => n.includes('ebitda') || n.includes('resultado operacional') },
+  { nome:'Ebitda',                              tipo:'subtotal', m:n => n.includes('ebitda') || n.includes('resultado operacional') },
   { nome:'Depreciação e Amortização',           tipo:'saida',    m:n => n.includes('deprecia') },
   { nome:'Resultado Financeiro',                tipo:'saida',    m:n => n.includes('financeir') && (n.includes('resultado') || n.includes('despesa')) },
-  { nome:'LAIR — Lucro Antes do IR',            tipo:'subtotal', m:n => /\blair\b/.test(n) || (n.includes('lucro') && n.includes('antes')) },
+  { nome:'Resultado antes do IR (Lajir)',       tipo:'subtotal', m:n => /\b(lair|lajir)\b/.test(n) || ((n.includes('lucro') || n.includes('resultado')) && n.includes('antes')) },
   { nome:'IR e CSLL',                           tipo:'saida',    m:n => n.includes('csll') || n.includes('imposto de renda') },
   { nome:'(-)Amortização de Empréstimos',       tipo:'saida',    m:n => n.includes('amortiz') && n.includes('emprestim') },
   { nome:'(-)Investimentos',                    tipo:'saida',    m:n => n.includes('investiment') },
   { nome:'(+) Novos Empréstimos Contratados',   tipo:'entrada',  m:n => n.includes('emprestim') && !n.includes('amortiz') && (n.includes('novo') || n.includes('contratad')) },
-  { nome:'Geração de Caixa após as dívidas',    tipo:'subtotal', m:n => n.includes('geracao') && n.includes('caixa') }
+  { nome:'Geração de Caixa após as Dívidas',    tipo:'subtotal', m:n => n.includes('geracao') && n.includes('caixa') }
 ];
 
 // Lista inicial de categorias (Grupo ; Categoria). Editável no modal antes de aplicar.
+// TDM — madeireira: fabricação de portas e cabanas.
 const DRE_CATEGORIAS_PADRAO = [
-  ['Receita Operacional Bruta', ['Receitas Com Produtos']],
-  ['CPV — Custo do Produto Vendido', ['Despesas Com Produtos', 'Insumos De Produção', 'Manutenção (Produção)', 'Despesa Com RH']],
-  ['Despesas Variáveis de Venda', ['Comissões', 'Fretes']],
-  ['Despesas Administrativas', ['Energia Elétrica Guisana', 'Água Escola', 'Água Fundos', 'Rissoletes', 'Manutenção Extintores',
-    'Alpha Ambiental', 'Conta De Celular', 'Consultoria', 'Contabilidade Nova', 'Datamais Sistemas', 'Energia Elétrica Silo',
-    'Seguro Empresa', 'Seguro Funcionários', 'Seguro Carros', 'Internet Unifique', 'Aluguel Empresa', 'Documentação Carros',
-    'Animais', 'Doações', 'Despesas Com Equipamentos', 'Pessoal Recepção E Zeladoria', 'Pró-Labore Mirian', 'ISS', 'IPTU Empresa',
-    'Guia INSS', 'Férias Funcionários', 'Salário Carlão', 'Despesas Pessoais Viscardi PF', 'Despesas Pessoais Caixa 2',
-    'Alvará Bombeiros', 'Alvará De Funcionamento', 'IPTU Casas', 'Salário Ana', 'Materiais De Escritório', 'Marketing',
-    'Mangueiras Fasina', 'Alteração CNPJ', 'Uniformes', 'Confraternização/Lanches', 'FB Informática', 'Software', 'Impostos Silo',
-    '*Salário', 'Brindes', 'Consultas Dos Viola', 'Faxineira', 'Certificado Digital', 'Escolas', 'Kaspersky', 'Serviços De Jardinagem']],
-  ['Resultado Financeiro', ['(+) Receita Financeira', '(-) Despesa Financeira']],
-  ['Despesas Administrativas', ['Hospedagem', 'Almoços/Lanches', 'Mecânica Carros']],
-  ['(-)Investimentos', ['Despesas Silo', 'Mesh', 'Compra Piso Elevado', 'Ar Silo', 'Construção Guisana', 'PPR']],
-  ['(-)Amortização de Empréstimos', ['Empréstimos Capital de Giro', 'Empréstimos Anos']]
+  ['Receita Operacional Bruta', ['Venda de Portas', 'Venda de Cabanas', 'Venda de Madeira Serrada',
+    'Venda de Subprodutos (Serragem, Cavaco, Lenha)', 'Serviços de Montagem e Instalação', 'Outras Receitas Operacionais']],
+  ['Deduções e Impostos sobre Vendas', ['Simples Nacional (DAS)', 'ICMS', 'IPI', 'PIS', 'COFINS', 'Devoluções e Abatimentos']],
+  ['CPV — Custo do Produto Vendido', ['Madeira em Tora', 'Madeira Serrada (Compra)', 'Chapas, Compensados e MDF',
+    'Ferragens (Dobradiças, Fechaduras, Puxadores)', 'Parafusos, Pregos e Fixadores', 'Colas e Adesivos',
+    'Vernizes, Tintas e Seladores', 'Tratamento de Madeira (Autoclave/Preservativos)', 'Telhas e Materiais de Cobertura',
+    'Vidros', 'Materiais Elétricos e Hidráulicos (Cabanas)', 'Embalagens', 'Salários Produção', 'Encargos e Benefícios Produção',
+    'Energia Elétrica Fábrica', 'Lenha e Combustível da Estufa (Secagem)', 'Combustível Máquinas e Empilhadeira',
+    'Manutenção de Máquinas e Equipamentos', 'Serras, Fresas e Afiação', 'EPIs', 'Serviços Terceirizados de Produção']],
+  ['Despesas Variáveis de Venda', ['Comissões', 'Fretes sobre Vendas', 'Montagem e Instalação Terceirizada',
+    'Taxas de Cartão e Meios de Pagamento']],
+  ['Despesas Administrativas', ['Pró-Labore', 'Salários Administrativo', 'Encargos e Benefícios Administrativo',
+    'Contabilidade', 'Consultoria', 'Honorários Jurídicos', 'Aluguel', 'Água', 'Energia Elétrica Escritório',
+    'Internet e Telefonia', 'Software e Sistemas', 'Materiais de Escritório', 'Seguros',
+    'Licenças Ambientais e DOF', 'Alvarás e Taxas', 'IPTU', 'Manutenção Predial', 'Limpeza e Conservação',
+    'Combustível Veículos', 'Manutenção de Veículos', 'Documentação de Veículos', 'Uniformes',
+    'Confraternizações e Lanches', 'Despesas Diversas']],
+  ['Despesas Comerciais', ['Salários Comercial', 'Marketing e Publicidade', 'Site e Redes Sociais',
+    'Feiras e Eventos', 'Catálogos e Material Promocional', 'Showroom e Mostruário', 'Viagens Comerciais']],
+  ['Depreciação e Amortização', ['Depreciação de Máquinas e Equipamentos', 'Depreciação de Veículos',
+    'Depreciação de Edificações e Instalações']],
+  ['Resultado Financeiro', ['(+) Receita Financeira', '(-) Despesa Financeira', '(-) Tarifas Bancárias', '(-) Juros e Multas']],
+  ['IR e CSLL', ['IRPJ', 'CSLL']],
+  ['(-)Amortização de Empréstimos', ['Empréstimos Capital de Giro', 'Financiamento de Máquinas', 'Financiamento de Veículos']],
+  ['(-)Investimentos', ['Máquinas e Equipamentos', 'Veículos', 'Construções e Benfeitorias', 'Ferramentas e Gabaritos', 'Informática']],
+  ['(+) Novos Empréstimos Contratados', ['Novos Empréstimos', 'Novos Financiamentos']]
 ];
 
 const _ehValorDre = t => t === 'entrada' || t === 'saida';
